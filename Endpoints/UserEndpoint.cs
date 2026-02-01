@@ -17,11 +17,13 @@ public static class UserEndpoint
 
     public static void UserMapEndpoints(this WebApplication app)
     {
+        var group = app.MapGroup("/Users");
 
-        app.MapGet("/", () => "How are you! Hello Bro");
+        group.MapGet("/", () => "How are you! Hello Bro");
 
-        app.MapGet("/GetUserDetails", () => UserDetails);
-        app.MapGet("/GetUserDetails/{id:int}", (int id) =>
+        group.MapGet("/GetUserDetails", () => UserDetails);
+        
+        group.MapGet("/GetUserDetails/{id:int}", (int id) =>
         {
             var user = UserDetails.Find(user => user.Id == id);
             if (user == null)
@@ -29,7 +31,7 @@ public static class UserEndpoint
             return Results.Ok(user);
         }).WithName(GetUserEndpointName);
 
-        app.MapPost("/CreateUser", (CreateUser newUser) =>
+        group.MapPost("/CreateUser", (CreateUser newUser) =>
         {
             Record newUserEntry = new(
             Id: ++Count,
@@ -40,16 +42,11 @@ public static class UserEndpoint
 
             UserDetails.Add(newUserEntry);
 
-            foreach (var ele in UserDetails)
-            {
-                Console.WriteLine(ele);
-            }
-
             return Results.CreatedAtRoute(GetUserEndpointName, new { id = newUserEntry.Id }, newUserEntry);
 
         });
 
-        app.MapPut("/UpdateUserDetails/{Id:int}", (int Id, UpdateUser payload) =>
+        group.MapPut("/UpdateUserDetails/{Id:int}", (int Id, UpdateUser payload) =>
         {
             var index = UserDetails.FindIndex((user) => user.Id == Id);
             UserDetails[index] = new Record(
@@ -62,7 +59,7 @@ public static class UserEndpoint
             return Results.NoContent();
         });
 
-        app.MapDelete("/DeleteUser/{Id:int}", (int Id) =>
+        group.MapDelete("/DeleteUser/{Id:int}", (int Id) =>
         {
             int userIndex = UserDetails.RemoveAll((user) => user.Id == Id);
 

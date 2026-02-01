@@ -1,22 +1,24 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace FirstProject.Dtos;
 
 public record Record(
     int Id,
-    string Name, 
-    string Gmail,
-    string Password
+    [Required][StringLength(20)] string Name, 
+    [Required] string Gmail,
+    [Required] string Password
 );
 
 
 public record CreateUser(
-    string Name, 
-    string Gmail,
-    string Password
+    [Required][StringLength(20)] string Name, 
+    [Required] string Gmail,
+    [Required] string Password
 );
 
 
 public record UpdateUser(
-    string Name, 
-    string Gmail,
-    string Password
+    [Required][StringLength(20)] string Name, 
+    [Required] string Gmail,
+    [Required] string Password
 );
