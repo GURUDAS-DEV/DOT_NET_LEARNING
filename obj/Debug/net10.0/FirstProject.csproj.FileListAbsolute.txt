@@ -26,3 +26,4 @@ C:\Users\Gursa\OneDrive\Desktop\CODING\DOTNET\FirstProject\obj\Debug\net10.0\ref
 C:\Users\Gursa\OneDrive\Desktop\CODING\DOTNET\FirstProject\obj\Debug\net10.0\FirstProject.pdb
 C:\Users\Gursa\OneDrive\Desktop\CODING\DOTNET\FirstProject\obj\Debug\net10.0\FirstProject.genruntimeconfig.cache
 C:\Users\Gursa\OneDrive\Desktop\CODING\DOTNET\FirstProject\obj\Debug\net10.0\ref\FirstProject.dll
+C:\Users\Gursa\OneDrive\Desktop\CODING\DOTNET\FirstProject\obj\Debug\net10.0\FirstProject.sourcelink.json
