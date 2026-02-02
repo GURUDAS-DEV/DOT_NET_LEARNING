@@ -1,4 +1,8 @@
+using System.Globalization;
+using FirstProject.Data;
 using FirstProject.Dtos;
+using FirstProject.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FirstProject.Endpoints;
 
@@ -15,56 +19,64 @@ public static class UserEndpoint
     ];
 
 
+
     public static void UserMapEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("/Users");
 
         group.MapGet("/", () => "How are you! Hello Bro");
 
-        group.MapGet("/GetUserDetails", () => UserDetails);
+        group.MapGet("/GetUserDetails", async(AppDbContext db) => {
+            return await db.Users.ToListAsync();
+        });
         
-        group.MapGet("/GetUserDetails/{id:int}", (int id) =>
+        group.MapGet("/GetUserDetails/{id:int}", async(int id, AppDbContext db) =>
         {
-            var user = UserDetails.Find(user => user.Id == id);
-            if (user == null)
-                return Results.NotFound();
+            var user = db.Users.Find(id);
+            if(user == null)
+                return Results.NotFound(new { Message = "User Not Found!!" });
             return Results.Ok(user);
         }).WithName(GetUserEndpointName);
 
-        group.MapPost("/CreateUser", (CreateUser newUser) =>
+        group.MapPost("/CreateUser", async (CreateUser newUser, AppDbContext db) =>
         {
-            Record newUserEntry = new(
-            Id: ++Count,
-            Name: newUser.Name,
-            Gmail: newUser.Gmail,
-            Password: newUser.Password
-            );
+            var newUserEntry = new User
+            {
+                Name = newUser.Name,
+                Gmail = newUser.Gmail,
+                Password = newUser.Password
+            };
 
-            UserDetails.Add(newUserEntry);
+            db.Users.Add(newUserEntry);
+            await db.SaveChangesAsync();
 
             return Results.CreatedAtRoute(GetUserEndpointName, new { id = newUserEntry.Id }, newUserEntry);
 
         });
 
-        group.MapPut("/UpdateUserDetails/{Id:int}", (int Id, UpdateUser payload) =>
+        group.MapPut("/UpdateUserDetails/{Id:int}", async (int Id, UpdateUser payload, AppDbContext db) =>
         {
-            var index = UserDetails.FindIndex((user) => user.Id == Id);
-            UserDetails[index] = new Record(
-              Id,
-              Name: payload.Name,
-              Gmail: payload.Gmail,
-              Password: payload.Password
-            );
+           var user = await db.Users.FindAsync(Id);
+           if(user == null) return Results.NotFound("Details Not Found!!");
 
-            return Results.NoContent();
+            user.Name = payload.Name;
+            user.Password = payload.Password;
+            user.Gmail = payload.Gmail;
+
+            await db.SaveChangesAsync();
+           return Results.NoContent();
         });
 
-        group.MapDelete("/DeleteUser/{Id:int}", (int Id) =>
+        group.MapDelete("/DeleteUser/{Id:int}", async (int Id, AppDbContext db) =>
         {
-            int userIndex = UserDetails.RemoveAll((user) => user.Id == Id);
 
+             var user = await db.Users.FindAsync(Id);
+            if (user == null) return Results.NotFound();
+
+
+            db.Users.Remove(user);
+            await db.SaveChangesAsync();
             return Results.NoContent();
-
         });
     }
 
