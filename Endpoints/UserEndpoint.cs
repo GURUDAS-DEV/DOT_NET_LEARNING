@@ -41,7 +41,7 @@ public static class UserEndpoint
         group.MapPost("/CreateUser", async (CreateUser newUser, AppDbContext db) =>
         {
             var newUserEntry = new User
-            {
+            { 
                 Name = newUser.Name,
                 Gmail = newUser.Gmail,
                 Password = newUser.Password
