@@ -8,15 +8,7 @@ namespace FirstProject.Endpoints;
 
 public static class UserEndpoint
 {
-    private static int Count = 4;
     private const string GetUserEndpointName = "GetUser";
-
-    private static readonly List<Record> UserDetails = [
-        new(1, "Gurudas", "Gurudas@gmail.com", "GurudasPassword"),
-        new(2, "Luffy", "Luffy@gmail.com", "LuffyPassword"),
-        new(3, "RoronoaZoro", "RoronoaZoro@gmail.com", "RoronoaZoroPassword"),
-        new(4, "Thorfinn", "Thorfinn@gmail.com", "ThorfinnPassword"),
-    ];
 
 
 
@@ -30,9 +22,9 @@ public static class UserEndpoint
             return await db.Users.ToListAsync();
         });
         
-        group.MapGet("/GetUserDetails/{id:int}", async(int id, AppDbContext db) =>
+        group.MapGet("/GetUserDetails/{id:int}", async (int id, AppDbContext db) =>
         {
-            var user = db.Users.Find(id);
+            var user = await db.Users.FindAsync(id);
             if(user == null)
                 return Results.NotFound(new { Message = "User Not Found!!" });
             return Results.Ok(user);

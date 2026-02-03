@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using FirstProject.Data;
-using FirstProject.Dtos;
 using FirstProject.Endpoints;
 using Microsoft.EntityFrameworkCore;
 
