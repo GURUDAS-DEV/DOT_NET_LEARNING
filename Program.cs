@@ -10,10 +10,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
+builder.Services.AddControllers();
 builder.Services.AddValidation();
+
 var app = builder.Build();
 
-app.UserMapEndpoints();
+app.MapControllers();
 
 app.Run();
 

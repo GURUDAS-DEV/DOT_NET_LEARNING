@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controller\" />
     <Folder Include="Dtos\" />
     <Folder Include="Endpoints\" />
     <Folder Include="Models\" />
