@@ -21,7 +21,7 @@ namespace FirstProject.Controller
                 {
                     return Results.NotFound();
                 }
-
+                
                 return Results.Ok(Users);
             }
             catch(Exception e){
